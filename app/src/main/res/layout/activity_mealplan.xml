@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#DDEEE4"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Cute Heading -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="🥗 Healthy You Plan!"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:textColor="#2E7D32"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="12dp" />
+
+        <!-- Description -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Based on your profile and health goals:\nHere’s your personalized Diet Plan"
+            android:textStyle="bold"
+            android:textColor="#000000"
+            android:textAlignment="center"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Name -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="12dp">
+
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="Name"
+                android:textSize="16dp"
+                android:textColor="#4CAF50" />
+
+            <EditText
+                android:id="@+id/etName"
+                android:layout_width="220dp"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName"
+                android:hint="Enter your name" />
+        </LinearLayout>
+
+        <!-- Age -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="12dp">
+
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="Age (18+)"
+                android:textSize="16dp"
+                android:textColor="#4CAF50" />
+
+            <EditText
+                android:id="@+id/etAge"
+                android:layout_width="220dp"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:hint="Enter age" />
+        </LinearLayout>
+
+        <!-- Height -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="12dp">
+
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="Height (in inches)"
+                android:textSize="16dp"
+                android:textColor="#4CAF50" />
+
+            <EditText
+                android:id="@+id/etHeight"
+                android:layout_width="220dp"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal"
+                android:hint="Inches" />
+        </LinearLayout>
+
+        <!-- Weight -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="12dp">
+
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="Weight (in kg)"
+                android:textSize="16dp"
+                android:textColor="#4CAF50" />
+
+            <EditText
+                android:id="@+id/etWeight"
+                android:layout_width="220dp"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal"
+                android:hint="Kg" />
+        </LinearLayout>
+
+        <!-- Goal Weight -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="12dp">
+
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="Goal Weight (kg)"
+                android:textSize="16dp"
+                android:textColor="#4CAF50" />
+
+            <EditText
+                android:id="@+id/etGoalWeight"
+                android:layout_width="220dp"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal"
+                android:hint="Goal kg" />
+        </LinearLayout>
+
+        <!-- Activity Level -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="12dp">
+
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="Activity Level"
+                android:textSize="16dp"
+                android:textColor="#4CAF50" />
+
+            <Spinner
+                android:id="@+id/spinnerActivityLevel"
+                android:layout_width="220dp"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <!-- Allergy -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="12dp">
+
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="Allergy"
+                android:textSize="16dp"
+                android:textColor="#4CAF50" />
+
+            <Spinner
+                android:id="@+id/spinnerAllergy"
+                android:layout_width="220dp"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <!-- Generate Button -->
+        <Button
+            android:id="@+id/btnGenerate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Generate Diet Plan"
+            android:backgroundTint="#4CAF50"
+            android:textColor="#FFFFFF"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Result Heading -->
+        <TextView
+            android:id="@+id/tvResultHeading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="✨ Here's your Diet Plan:"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:textColor="#2E7D32"
+            android:layout_marginBottom="8dp"
+            android:visibility="gone" />
+
+        <!-- Stylish Result Box -->
+        <TextView
+            android:id="@+id/tvResult"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/result_box"
+            android:padding="16dp"
+            android:textColor="#333333"
+            android:textSize="16sp"
+            android:visibility="gone"
+            android:elevation="4dp" />
+
+    </LinearLayout>
+</ScrollView>

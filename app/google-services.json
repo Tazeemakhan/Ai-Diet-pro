@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "839518672529",
+    "project_id": "tazeema-khan",
+    "storage_bucket": "tazeema-khan.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:839518672529:android:6ce4af4fa872e857f31130",
+        "android_client_info": {
+          "package_name": "com.example.dummy"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBWjS9t8mZdPzW3ZDn-mFs8Lyg6rvmOmcQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
