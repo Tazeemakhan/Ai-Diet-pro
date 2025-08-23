@@ -72,7 +72,7 @@
             android:layout_marginTop="12dp"
             android:background="@drawable/button_rounded_premium"
             android:gravity="center"
-            android:text="SELECT"
+            android:text="BUY"
             android:textColor="#FFFFFF"
             android:textSize="19sp"
             android:textStyle="bold" />
@@ -126,7 +126,7 @@
             android:layout_marginTop="12dp"
             android:background="@drawable/button_rounded_premium"
             android:gravity="center"
-            android:text="SELECT"
+            android:text="BUY"
             android:textColor="#FFFFFF"
             android:textSize="19sp"
             android:textStyle="bold" />

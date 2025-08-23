@@ -1,0 +1,7 @@
+package com.example.dummy
+
+object Utils {
+
+    const val PUBLISHABLE_KEY="pk_test_51RvXR0RjlxajMcmuU20opcsDaPN3OHx8cQxpPZ1woocpeX4Uws4SgjC5gAxq1pNAL0p3LQSKZtAgIz8PiNZZgsO600pnTZ4xeC"
+    const val SECRET_KEY="sk_test_51RvXR0RjlxajMcmushuoYIev2B3hAE6n7IRW9dbDJS2xKqXT9pFAun6ZRd1jseXEjLTgnYNGCExqPcjPPSszIk6R00SGWaQhcj"
+}
