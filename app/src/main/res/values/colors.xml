@@ -3,4 +3,5 @@
     <color name="carbs">#4CAF50</color>
     <color name="fats">#FFC107</color>
     <color name="green_500">#4CAF50</color>
+    <color name="notification_color">#4CAF50</color>
 </resources>
