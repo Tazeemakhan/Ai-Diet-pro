@@ -44,12 +44,25 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
-    implementation(libs.firebase.auth)
-    implementation(libs.firebase.database)
-    implementation(libs.firebase.firestore)
+
+    // Firebase BoM
+   // implementation(platform("com.google.firebase:firebase-bom:34.1.0"))
+    implementation(platform("com.google.firebase:firebase-bom:33.5.1"))
+    // Firebase SDKs
+    //implementation("com.google.firebase:firebase-analytics")
+    implementation("com.google.firebase:firebase-messaging")
+    implementation("com.google.firebase:firebase-auth-ktx")
+    implementation("com.google.firebase:firebase-database-ktx")
+    implementation("com.google.firebase:firebase-firestore-ktx")
+    implementation("com.google.firebase:firebase-analytics-ktx")
+   // implementation(libs.firebase.auth)
+   // implementation(libs.firebase.database)
+   // implementation(libs.firebase.firestore)
+   // implementation(libs.firebase.messaging.ktx)
+
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
-    implementation(libs.firebase.messaging.ktx)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -58,11 +71,8 @@ dependencies {
     // Stripe Android SDK
     implementation("com.stripe:stripe-android:21.23.0")
 
-    // Firebase BoM
-    implementation(platform("com.google.firebase:firebase-bom:34.1.0"))
-    // Firebase SDKs
-    implementation("com.google.firebase:firebase-analytics")
-    implementation("com.google.firebase:firebase-messaging")
+
+
 }
 
 
