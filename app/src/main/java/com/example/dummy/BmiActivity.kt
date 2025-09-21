@@ -25,11 +25,6 @@ class BmiActivity : AppCompatActivity() {
         val bmiValue = findViewById<TextView>(R.id.bmiValue)
         val bmiMessage = findViewById<TextView>(R.id.bmiMessage)
         val calculateBtn = findViewById<Button>(R.id.calculateBtn)
-        val previousBtn = findViewById<Button>(R.id.previousBtn)
-        previousBtn.setOnClickListener {
-            startActivity(Intent(this, HomeActivity::class.java))
-            finish()
-        }
 
 
         calculateBtn.setOnClickListener {

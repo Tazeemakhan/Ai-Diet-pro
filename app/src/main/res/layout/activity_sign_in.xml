@@ -33,7 +33,11 @@
             android:hint="Username"
             android:layout_marginHorizontal="10dp"
             android:padding="12dp"
-            android:background="@android:drawable/edit_text" />
+            android:background="@android:drawable/edit_text"
+            android:textColor="#000000"
+            android:textColorHint="#7D7D7D"
+            android:focusable="true"
+            android:cursorVisible="true"/>
 
         <EditText
             android:id="@+id/et_password"
@@ -44,7 +48,20 @@
             android:inputType="textPassword"
             android:padding="12dp"
             android:layout_marginTop="16dp"
-            android:background="@android:drawable/edit_text" />
+            android:background="@android:drawable/edit_text"
+            android:textColor="#000000"
+            android:textColorHint="#7D7D7D"
+            android:focusable="true"
+            android:cursorVisible="true"
+            />
+        <TextView
+            android:id="@+id/tv_show_hide_password"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Show"
+            android:textColor="#4CAF50"
+            android:textStyle="bold"
+            android:layout_marginTop="8dp" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_login"
@@ -56,16 +73,6 @@
             android:layout_marginTop="24dp"
             app:cornerRadius="15dp"
             app:backgroundTint="#4CAF50" />
-
-        <TextView
-            android:id="@+id/tv_forgot_password"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Forget Password?"
-            android:textColor="#7D7D7D"
-            android:textSize="14sp"
-            android:layout_marginTop="16dp"
-            android:gravity="center"/>
 
         <LinearLayout
             android:layout_width="wrap_content"

@@ -74,7 +74,7 @@ class HomeActivity : AppCompatActivity() {
             startActivity(Intent(this, CalorieActivity::class.java))
         }
         progressCard.setOnClickListener {
-            startActivity(Intent(this, ProgressActivity::class.java))
+            startActivity(Intent(this, WeightProgressActivity::class.java))
         }
     }
 

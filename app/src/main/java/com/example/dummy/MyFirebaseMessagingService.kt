@@ -11,11 +11,28 @@ import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import com.google.firebase.firestore.FirebaseFirestore
 
 const val channelId = "notification_channel"
 const val channelName= "com.example.dummy"
 
 class MyFirebaseMessagingService :  FirebaseMessagingService() {
+
+    override fun onNewToken(token: String) {
+        super.onNewToken(token)
+
+        val db = FirebaseFirestore.getInstance()
+        val userId = "user123" // TODO: actual FirebaseAuth user.uid use karna
+
+        db.collection("users").document(userId)
+            .update("fcmToken", token)
+            .addOnSuccessListener {
+                println("Token saved in Firestore: $token")
+            }
+            .addOnFailureListener { e ->
+                println("Error saving token: $e")
+            }
+    }
 
     //generate the notification
     // attach the notification created with the custom  layout

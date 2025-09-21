@@ -64,6 +64,8 @@
                     android:background="@drawable/rounded_edittext"
                     android:backgroundTint="#B8E3A4"
                     android:hint="User name"
+                    android:textColor="#000000"
+                    android:textColorHint="#808080"
                     android:padding="10dp"
                     android:inputType="textPersonName" />
 
@@ -85,6 +87,8 @@
                     android:background="@drawable/rounded_edittext"
                     android:backgroundTint="#B8E3A4"
                     android:hint="Enter your age"
+                    android:textColor="#000000"
+                    android:textColorHint="#808080"
                     android:padding="10dp"
                     android:inputType="number" />
 
@@ -105,6 +109,8 @@
                     android:layout_height="50dp"
                     android:background="@drawable/rounded_edittext"
                     android:backgroundTint="#B8E3A4"
+                    android:textColor="#000000"
+                    android:textColorHint="#808080"
                     android:clickable="true"
                     android:dropDownHeight="wrap_content"
                     android:dropDownVerticalOffset="10dp"
@@ -132,7 +138,35 @@
                     android:backgroundTint="#B8E3A4"
                     android:hint="Enter your weight"
                     android:padding="10dp"
+                    android:textColor="#000000"
+                    android:textColorHint="#808080"
                     android:inputType="numberDecimal" />
+
+
+
+                <!-- ✅ Goal Weight Field -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="4dp"
+                    android:text="Goal Weight (kg)"
+                    android:textAllCaps="true"
+                    android:textColor="#4CAF1B"
+                    android:textSize="15sp" />
+
+                <EditText
+                    android:id="@+id/etGoalWeight"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@drawable/rounded_edittext"
+                    android:backgroundTint="#B8E3A4"
+                    android:hint="Enter your goal weight"
+                    android:textColor="#000000"
+                    android:textColorHint="#808080"
+                    android:padding="10dp"
+                    android:inputType="numberDecimal" />
+
 
                 <!-- Height -->
                 <TextView
@@ -153,6 +187,8 @@
                     android:inputType="none"
                     android:focusable="false"
                     android:clickable="true"
+                    android:textColor="#000000"
+                    android:textColorHint="#808080"
                     android:background="@drawable/rounded_edittext"
                     android:backgroundTint="#B8E3A4"
                     android:padding="10dp" />
@@ -175,6 +211,8 @@
                     android:background="@drawable/rounded_edittext"
                     android:backgroundTint="#B8E3A4"
                     android:hint="Select your Activity Level"
+                    android:textColor="#000000"
+                    android:textColorHint="#808080"
                     android:padding="10dp"
                     android:inputType="none"
                     android:focusable="false"
@@ -200,6 +238,8 @@
                     android:hint="select allergy if any"
                     android:padding="10dp"
                     android:inputType="none"
+                    android:textColor="#000000"
+                    android:textColorHint="#808080"
                     android:focusable="false"
                     android:clickable="true" />
 

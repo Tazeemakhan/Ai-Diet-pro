@@ -81,9 +81,9 @@
     <!-- Yearly Plan Card -->
     <LinearLayout
         android:id="@+id/yearlyCard"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="26dp"
+        android:layout_marginTop="16dp"
         android:background="@drawable/card_background_premium"
         android:orientation="vertical"
         android:padding="16dp"
@@ -93,8 +93,8 @@
         app:layout_constraintWidth_percent="0.9">
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="348dp"
+            android:layout_height="24dp"
             android:gravity="center"
             android:text="Yearly Plan - Rs. 5000"
             android:textColor="#000000"

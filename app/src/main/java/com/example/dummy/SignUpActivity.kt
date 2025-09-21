@@ -4,27 +4,49 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
-import androidx.appcompat.app.AppCompatActivity
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import android.text.method.PasswordTransformationMethod
+import android.text.method.HideReturnsTransformationMethod
 import com.google.firebase.auth.FirebaseAuth
 
 class SignUpActivity : AppCompatActivity() {
+
     private lateinit var firebaseAuth: FirebaseAuth
+    private var isPasswordVisible = false  // Track password visibility
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_up)
 
         firebaseAuth = FirebaseAuth.getInstance()
+
         val signInText = findViewById<TextView>(R.id.tv_sign_in_here)
         val email = findViewById<EditText>(R.id.et_email)
         val password = findViewById<EditText>(R.id.et_password)
+        val toggleText = findViewById<TextView>(R.id.tv_show_hide_password)
         val signUp = findViewById<Button>(R.id.btn_sign_up)
+
+        // --- SHOW / HIDE PASSWORD ---
+        toggleText.setOnClickListener {
+            isPasswordVisible = !isPasswordVisible
+            if (isPasswordVisible) {
+                password.transformationMethod = HideReturnsTransformationMethod.getInstance()
+                toggleText.text = "Hide"
+            } else {
+                password.transformationMethod = PasswordTransformationMethod.getInstance()
+                toggleText.text = "Show"
+            }
+            password.setSelection(password.text.length) // keep cursor at end
+        }
+        // --- END SHOW / HIDE PASSWORD ---
 
         signInText.setOnClickListener {
             val intent = Intent(this, SignInActivity::class.java)
             startActivity(intent)
         }
+
         signUp.setOnClickListener {
             val userEmail = email.text.toString().trim()
             val userPassword = password.text.toString().trim()
@@ -48,6 +70,5 @@ class SignUpActivity : AppCompatActivity() {
                 Toast.makeText(this, "Please enter both email and password", Toast.LENGTH_SHORT).show()
             }
         }
-
     }
 }

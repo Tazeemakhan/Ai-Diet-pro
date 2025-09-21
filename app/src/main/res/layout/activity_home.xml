@@ -46,12 +46,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Tap to calculate BMI"
-                android:textSize="24sp"
-                android:textColor="#388E3C"
+                android:radius="16dp"
+                android:textSize="18sp"
+                android:textColor="@android:color/white"
+                android:background="#4CAF50"
+                android:padding="12dp"
+                android:gravity="center"
                 android:layout_marginBottom="24dp"
                 android:clickable="true"
-                android:focusable="true"
-                android:background="?attr/selectableItemBackground" />
+                android:focusable="true" />
 
             <!-- Grid Layout for Cards -->
             <LinearLayout

@@ -47,8 +47,7 @@ class HydrationActivity : AppCompatActivity() {
 
             val btnIncrement: Button = findViewById(R.id.btnIncrement)
             val btnDecrement: Button = findViewById(R.id.btnDecrement)
-            val btnNext: Button = findViewById(R.id.btnNext)
-            val btnPrevious: Button = findViewById(R.id.btnPrevious)
+
 
             // Create 8 ImageViews for glasses
             for (i in 0 until maxGlass) {
@@ -82,13 +81,6 @@ class HydrationActivity : AppCompatActivity() {
                 }
             }
 
-            btnNext.setOnClickListener {
-                Toast.makeText(this, "Next clicked", Toast.LENGTH_SHORT).show()
-            }
-
-            btnPrevious.setOnClickListener {
-                finish()
-            }
 
         } catch (e: Exception) {
             Log.e("HydrationActivity", "Error in onCreate: ${e.message}")

@@ -11,11 +11,13 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
 class BasicInformationActivity : AppCompatActivity() {
 
     private lateinit var db: FirebaseFirestore
+    private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,11 +25,13 @@ class BasicInformationActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main2)
 
         db = FirebaseFirestore.getInstance()
+        auth = FirebaseAuth.getInstance()
 
         val etName = findViewById<EditText>(R.id.etName)
         val etAge = findViewById<EditText>(R.id.etage)
         val etGender = findViewById<AutoCompleteTextView>(R.id.etgender)
         val etWeight = findViewById<EditText>(R.id.etWeight)
+        val etGoalWeight = findViewById<EditText>(R.id.etGoalWeight)   // ✅ NEW FIELD
         val etHeight = findViewById<AutoCompleteTextView>(R.id.etHeight)
         val etActivity = findViewById<AutoCompleteTextView>(R.id.etActivity)
         val etAllergy = findViewById<AutoCompleteTextView>(R.id.etAllergy)
@@ -38,18 +42,20 @@ class BasicInformationActivity : AppCompatActivity() {
         etGender.setAdapter(genderAdapter)
         etGender.setOnClickListener { etGender.showDropDown() }
 
-        // Heights in feet.inches decimal format as requested
+        // Heights in feet.inches
         val heightOptions = arrayOf(
             "4.5", "4.6", "4.7",
             "5.0", "5.1", "5.2", "5.3", "5.4", "5.5", "5.6", "5.7",
             "6.0", "6.1", "6.2", "6.3", "6.4", "6.5", "6.6", "6.7"
         )
-        val heightAdapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, heightOptions)
+        val heightAdapter =
+            ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, heightOptions)
         etHeight.setAdapter(heightAdapter)
         etHeight.setOnClickListener { etHeight.showDropDown() }
 
         val activityOptions = arrayOf("Sedentary", "Moderate", "Very Active")
-        val activityAdapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, activityOptions)
+        val activityAdapter =
+            ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, activityOptions)
         etActivity.setAdapter(activityAdapter)
         etActivity.setOnClickListener { etActivity.showDropDown() }
 
@@ -57,7 +63,8 @@ class BasicInformationActivity : AppCompatActivity() {
             "Milk / Dairy", "Eggs", "Peanuts", "Tree Nuts (almonds, cashews etc.)",
             "Wheat/gluten", "Soybean", "Fish", "Corn", "None"
         )
-        val allergyAdapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, allergyOptions)
+        val allergyAdapter =
+            ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, allergyOptions)
         etAllergy.setAdapter(allergyAdapter)
         etAllergy.setOnClickListener { etAllergy.showDropDown() }
 
@@ -72,17 +79,18 @@ class BasicInformationActivity : AppCompatActivity() {
             val ageStr = etAge.text.toString().trim()
             val gender = etGender.text.toString().trim()
             val weightStr = etWeight.text.toString().trim()
+            val goalWeightStr = etGoalWeight.text.toString().trim()  // ✅ NEW FIELD
             val height = etHeight.text.toString().trim()
             val activityLevel = etActivity.text.toString().trim()
             val allergy = etAllergy.text.toString().trim()
 
-            // Name validation (no numbers or special chars allowed in name)
+            // Name validation
             if (name.isEmpty() || !name.matches("^[a-zA-Z\\s]+$".toRegex())) {
-                Toast.makeText(this, "Please enter a valid name (only letters and spaces)", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Please enter a valid name (only letters)", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
-            // Age validation numeric and range
+            // Age validation
             val age = ageStr.toIntOrNull()
             if (age == null || age < 18 || age > 80) {
                 Toast.makeText(this, "Please enter a valid age between 18 and 80", Toast.LENGTH_SHORT).show()
@@ -95,16 +103,23 @@ class BasicInformationActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            // Weight validation numeric and positive
+            // Current weight validation
             val weight = weightStr.toDoubleOrNull()
             if (weight == null || weight <= 0) {
-                Toast.makeText(this, "Please enter a valid weight (positive number)", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Please enter a valid weight", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
-            // Height validation (must be from dropdown options)
+            // ✅ Goal weight validation
+            val goalWeight = goalWeightStr.toDoubleOrNull()
+            if (goalWeight == null || goalWeight <= 0) {
+                Toast.makeText(this, "Please enter a valid goal weight", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            // Height validation
             if (height.isEmpty() || !heightOptions.contains(height)) {
-                Toast.makeText(this, "Please select your height from the list", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Please select your height", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
@@ -114,33 +129,38 @@ class BasicInformationActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            // Allergy validation - optional if needed (can be none)
+            // Allergy validation
             if (allergy.isEmpty() || !allergyOptions.contains(allergy)) {
                 Toast.makeText(this, "Please select your allergy from the list", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
+            // ✅ Save data to Firestore
             val user = hashMapOf(
                 "name" to name,
                 "age" to age,
                 "gender" to gender,
                 "weight" to weight,
+                "goalWeight" to goalWeight,   // ✅ NEW FIELD SAVED
                 "height" to height,
                 "activityLevel" to activityLevel,
                 "allergy" to allergy
             )
 
-            db.collection("users")
-                .add(user)
-                .addOnSuccessListener {
-                    Toast.makeText(this, "Data Saved Successfully", Toast.LENGTH_SHORT).show()
-                    val intent = Intent(this, HomeActivity::class.java)
-                    startActivity(intent)
-                    finish()
-                }
-                .addOnFailureListener { e ->
-                    Toast.makeText(this, "Failed: ${e.message}", Toast.LENGTH_LONG).show()
-                }
+            val uid = auth.currentUser?.uid
+            if (uid != null) {
+                db.collection("users").document(uid)
+                    .set(user)
+                    .addOnSuccessListener {
+                        Toast.makeText(this, "Data Saved Successfully", Toast.LENGTH_SHORT).show()
+                        val intent = Intent(this, HomeActivity::class.java)
+                        startActivity(intent)
+                        finish()
+                    }
+                    .addOnFailureListener { e ->
+                        Toast.makeText(this, "Failed: ${e.message}", Toast.LENGTH_LONG).show()
+                    }
+            }
         }
     }
 }

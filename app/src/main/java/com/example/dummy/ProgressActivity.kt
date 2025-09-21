@@ -1,210 +1,177 @@
 package com.example.dummy
 
-import android.graphics.Color
 import android.os.Bundle
-import android.view.View
 import android.widget.*
-import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import com.github.mikephil.charting.charts.LineChart
-import com.github.mikephil.charting.components.*
-import com.github.mikephil.charting.data.*
+import com.github.lzyzsd.circleprogress.ArcProgress
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.github.mikephil.charting.formatter.ValueFormatter
-import java.text.DecimalFormat
 
-class ProgressActivity : AppCompatActivity() {
+class WeightProgressActivity : AppCompatActivity() {
+
+    private lateinit var arcProgress: ArcProgress
+    private lateinit var tvWeightLost: TextView
+    private lateinit var tvCurrentWeight: TextView
+    private lateinit var tvGoalWeightCircle: TextView
+    private lateinit var tvInitialWeight: TextView
+    private lateinit var btnAddWeight: Button
+
+    // User info
+    private lateinit var tvName: TextView
+    private lateinit var tvAge: TextView
+    private lateinit var tvGender: TextView
+    private lateinit var tvHeight: TextView
+    private lateinit var tvWeight: TextView
+    private lateinit var tvGoalWeightInfo: TextView
+    private lateinit var tvActivity: TextView
+    private lateinit var tvAllergy: TextView
+
+    private var initialWeight = 0f
+    private var currentWeight = 0f
+    private var goalWeight = 0f
 
     private lateinit var db: FirebaseFirestore
-    private lateinit var tvName: TextView
-    private lateinit var tvInitialWeight: TextView
-    private lateinit var etNewWeight: EditText
-    private lateinit var etDays: EditText
-    private lateinit var btnTrackProgress: Button
-    private lateinit var lineChart: LineChart
-    private lateinit var resultBox: LinearLayout
-    private lateinit var tvChangeResult: TextView
-    private lateinit var tvBadge: TextView
-
-    private var progressEntries = mutableListOf<Entry>()
-    private var totalDays = 0
-    private var initialWeight = 0f
+    private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(R.layout.activity_progress)
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
-
-        initViews()
-        setupChart()
-        loadInitialData()
-    }
-
-    private fun initViews() {
-        db = FirebaseFirestore.getInstance()
-        tvName = findViewById(R.id.tvName)
+        // Bind views
+        arcProgress = findViewById(R.id.arcProgress)
+        tvWeightLost = findViewById(R.id.tvWeightLost)
+        tvCurrentWeight = findViewById(R.id.tvCurrentWeight)
+        tvGoalWeightCircle = findViewById(R.id.tvGoalWeightCircle)
         tvInitialWeight = findViewById(R.id.tvInitialWeight)
-        etNewWeight = findViewById(R.id.etNewWeight)
-        etDays = findViewById(R.id.etDays)
-        btnTrackProgress = findViewById(R.id.btnTrackProgress)
-        lineChart = findViewById(R.id.lineChart)
-        resultBox = findViewById(R.id.resultBox)
-        tvChangeResult = findViewById(R.id.tvChangeResult)
-        tvBadge = findViewById(R.id.tvBadge)
+        btnAddWeight = findViewById(R.id.btnAddWeight)
 
-        btnTrackProgress.setOnClickListener { trackProgress() }
+        // User info views
+        tvName = findViewById(R.id.tvName)
+        tvAge = findViewById(R.id.tvAge)
+        tvGender = findViewById(R.id.tvGender)
+        tvHeight = findViewById(R.id.tvHeight)
+        tvWeight = findViewById(R.id.tvWeight)
+        tvGoalWeightInfo = findViewById(R.id.tvGoalWeightInfo)
+        tvActivity = findViewById(R.id.tvActivity)
+        tvAllergy = findViewById(R.id.tvAllergy)
+
+        db = FirebaseFirestore.getInstance()
+        auth = FirebaseAuth.getInstance()
+
+        loadUserData()
+
+        btnAddWeight.setOnClickListener {
+            showWeightInputDialog()
+        }
     }
 
-    private fun loadInitialData() {
-        db.collection("users")
-            .orderBy("name")
-            .limit(1)
-            .get()
-            .addOnSuccessListener { documents ->
-                for (doc in documents) {
-                    val name = doc.getString("name") ?: "User"
-                    val weight = doc.getDouble("weight") ?: 0.0
+    private fun loadUserData() {
+        val uid = auth.currentUser?.uid ?: return
 
-                    tvName.text = "👤 Name: $name"
-                    tvInitialWeight.text = "⚖️ Initial Weight: ${weight}kg"
-                    initialWeight = weight.toFloat()
+        db.collection("users").document(uid).get()
+            .addOnSuccessListener { doc ->
+                if (doc != null && doc.exists()) {
 
-                    // Add initial point (Day 0)
-                    progressEntries.add(Entry(initialWeight, 0f))
-                    updateChart()
+                    // --- SAFE FETCH ---
+                    fun getSafeFloat(key: String): Float {
+                        return when (val value = doc.get(key)) {
+                            is Number -> value.toFloat()
+                            is String -> value.toFloatOrNull() ?: 0f
+                            else -> 0f
+                        }
+                    }
+
+                    val name = doc.getString("name") ?: "N/A"
+                    val age = (doc.getLong("age") ?: 0L).toInt()
+                    val gender = doc.getString("gender") ?: "N/A"
+                    val height = getSafeFloat("height").toInt()
+                    val weight = getSafeFloat("weight")
+                    val goalW = getSafeFloat("goalWeight")
+                    val activity = doc.getString("activityLevel") ?: "N/A"
+                    val allergy = doc.getString("allergy") ?: "N/A"
+
+                    // Set UI
+                    tvName.text = "Name: $name"
+                    tvAge.text = "Age: $age"
+                    tvGender.text = "Gender: $gender"
+                    tvHeight.text = "Height: $height cm"
+                    tvWeight.text = "Weight: ${weight.toInt()} kg"
+                    tvGoalWeightInfo.text = "Goal Weight: ${goalW.toInt()} kg"
+                    tvActivity.text = "Activity: $activity"
+                    tvAllergy.text = "Allergy: $allergy"
+
+                    // For progress
+                    initialWeight = weight
+                    goalWeight = goalW
+                    tvInitialWeight.text = "Initial: ${initialWeight.toInt()} kg"
+                    tvGoalWeightCircle.text = "Goal: ${goalWeight.toInt()} kg"
+
+                    currentWeight = getSafeFloat("currentWeight")
+                    if (currentWeight > 0f) {
+                        updateUI()
+                    }
                 }
             }
             .addOnFailureListener {
-                Toast.makeText(this, "Error loading user data", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Failed to fetch data", Toast.LENGTH_SHORT).show()
             }
     }
 
-    private fun trackProgress() {
-        val weightStr = etNewWeight.text.toString()
-        val daysStr = etDays.text.toString()
+    private fun updateUI() {
+        if (currentWeight == 0f || goalWeight == 0f || initialWeight == 0f) return
 
-        val newWeight = weightStr.toFloatOrNull()
-        val daysToAdd = daysStr.toIntOrNull()
+        // --- Calculate progress properly ---
+        val totalDiff = initialWeight - goalWeight
+        val currentDiff = initialWeight - currentWeight
 
-        if (newWeight == null || daysToAdd == null || newWeight <= 0 || daysToAdd <= 0) {
-            Toast.makeText(this, "Please enter valid data", Toast.LENGTH_SHORT).show()
-            return
+        val progress = if (totalDiff != 0f) {
+            ((currentDiff / totalDiff) * 100).toInt()
+        } else 0
+
+        arcProgress.progress = progress.coerceIn(0, 100)
+
+        // Weight lost/gained text
+        val weightDiff = currentWeight - initialWeight
+        tvWeightLost.text = when {
+            weightDiff < 0 -> String.format("%.1f kg lost", -weightDiff)
+            weightDiff > 0 -> String.format("%.1f kg gained", weightDiff)
+            else -> "No change"
         }
 
-        totalDays += daysToAdd
-        progressEntries.add(Entry(newWeight, totalDays.toFloat()))
-
-        updateResults(newWeight)
-        updateChart()
-        clearInputs()
+        tvCurrentWeight.text = "Current: ${currentWeight.toInt()} kg"
     }
 
-    private fun updateResults(currentWeight: Float) {
-        val weightChange = initialWeight - currentWeight
-        val changePerDay = weightChange / totalDays
+    private fun showWeightInputDialog() {
+        val editText = EditText(this)
+        editText.hint = "Enter current weight"
 
-        resultBox.visibility = View.VISIBLE
-        tvChangeResult.text = "🎯 Progress: ${formatWeight(weightChange)}kg in $totalDays days" +
-                "\n📊 Avg: ${formatWeight(changePerDay)}kg/day"
-
-        tvBadge.text = when {
-            weightChange >= 5 -> "🏆 Champion (${formatWeight(weightChange)}kg)"
-            weightChange >= 2 -> "💪 Pro (${formatWeight(weightChange)}kg)"
-            weightChange > 0 -> "👍 Starter (${formatWeight(weightChange)}kg)"
-            else -> "🔍 Keep Going"
-        }
-    }
-
-    private fun formatWeight(value: Float): String {
-        return DecimalFormat("#.#").format(value)
-    }
-
-    private fun clearInputs() {
-        etNewWeight.text.clear()
-        etDays.text.clear()
-    }
-
-    private fun setupChart() {
-        with(lineChart) {
-            setTouchEnabled(true)
-            setPinchZoom(true)
-            description.isEnabled = false
-            legend.isEnabled = false
-            axisRight.isEnabled = false
-
-            // X-Axis (Weight)
-            xAxis.apply {
-                position = XAxis.XAxisPosition.BOTTOM
-                granularity = 1f
-                setDrawGridLines(false)
-                textSize = 12f
-                textColor = Color.DKGRAY
-                valueFormatter = object : ValueFormatter() {
-                    override fun getFormattedValue(value: Float): String {
-                        return "${value.toInt()}kg"
-                    }
+        AlertDialog.Builder(this)
+            .setTitle("Update Current Weight")
+            .setView(editText)
+            .setPositiveButton("Save") { _, _ ->
+                val newWeight = editText.text.toString().toFloatOrNull()
+                if (newWeight != null) {
+                    currentWeight = newWeight
+                    saveWeightToFirestore(newWeight)
+                    updateUI()
+                } else {
+                    Toast.makeText(this, "Invalid weight", Toast.LENGTH_SHORT).show()
                 }
             }
-
-            // Y-Axis (Days)
-            axisLeft.apply {
-                granularity = 1f
-                textSize = 12f
-                textColor = Color.DKGRAY
-                axisMinimum = 0f
-                valueFormatter = object : ValueFormatter() {
-                    override fun getFormattedValue(value: Float): String {
-                        return "Day ${value.toInt()}"
-                    }
-                }
-            }
-        }
+            .setNegativeButton("Cancel", null)
+            .show()
     }
 
-    private fun updateChart() {
-        if (progressEntries.isEmpty()) return
-
-        val dataSet = LineDataSet(progressEntries, "").apply {
-            color = Color.parseColor("#4CAF50")
-            valueTextColor = Color.BLACK
-            lineWidth = 3f
-            circleRadius = 5f
-            setCircleColor(Color.parseColor("#388E3C"))
-            setDrawValues(false)
-            mode = LineDataSet.Mode.CUBIC_BEZIER
-            setDrawFilled(true)
-            fillColor = Color.parseColor("#804CAF50")
-            fillAlpha = 100
-        }
-
-        lineChart.data = LineData(dataSet)
-
-        // Auto-scale axes
-        val weights = progressEntries.map { it.x }
-        val days = progressEntries.map { it.y }
-
-        lineChart.xAxis.apply {
-            axisMinimum = (weights.minOrNull() ?: 0f) - 5f
-            axisMaximum = (weights.maxOrNull() ?: 100f) + 5f
-        }
-
-        lineChart.axisLeft.apply {
-            axisMinimum = 0f
-            axisMaximum = (days.maxOrNull() ?: 7f) + 1f
-        }
-
-        // Add marker
-        val marker = CustomMarkerView(this, R.layout.custom_marker)
-        lineChart.marker = marker
-
-        lineChart.invalidate()
+    private fun saveWeightToFirestore(newWeight: Float) {
+        val uid = auth.currentUser?.uid ?: return
+        db.collection("users").document(uid)
+            .update("currentWeight", newWeight)
+            .addOnSuccessListener {
+                Toast.makeText(this, "Weight updated!", Toast.LENGTH_SHORT).show()
+            }
+            .addOnFailureListener {
+                Toast.makeText(this, "Failed to update weight", Toast.LENGTH_SHORT).show()
+            }
     }
 }
