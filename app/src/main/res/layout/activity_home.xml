@@ -226,11 +226,11 @@
     <!-- Diamond Button (Top Right) -->
     <ImageButton
         android:id="@+id/diamondButton"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_width="38dp"
+        android:layout_height="38dp"
         android:layout_gravity="top|end"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="20dp"
         android:background="@drawable/diamond_icon"
-        android:padding="32dp" />
+        android:padding="20dp" />
 </FrameLayout>

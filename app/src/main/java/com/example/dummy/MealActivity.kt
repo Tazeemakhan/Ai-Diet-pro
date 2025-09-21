@@ -139,20 +139,20 @@ class MealActivity : AppCompatActivity() {
             - Include portion sizes
             - Realistic calorie estimates
 
-            OUTPUT FORMAT - MOBILE FRIENDLY:
+            OUTPUT FORMAT - MOBILE FRIENDLY & JUSTIFIED:
             Return ONLY the meal plan in this exact format with NO extra text, explanations, or notes:
 
-            • Breakfast (XXX kcal)
-            * Food item with portion (XX kcal)
-            * Food item with portion (XX kcal)
+            🍳 Breakfast (XXX kcal)
+            🔹 Food item with portion (XX kcal)
+            🔹 Food item with portion (XX kcal)
 
-            • Lunch (XXX kcal)
-            * Food item with portion (XX kcal)
-            * Food item with portion (XX kcal)
+            🍛 Lunch (XXX kcal)
+            🔹 Food item with portion (XX kcal)
+            🔹 Food item with portion (XX kcal)
 
-            • Dinner (XXX kcal)
-            * Food item with portion (XX kcal)
-            * Food item with portion (XX kcal)
+            🌙 Dinner (XXX kcal)
+            🔹 Food item with portion (XX kcal)
+            🔹 Food item with portion (XX kcal)
 
             Provide ONLY the formatted meal plan above. No validation statements, no explanations, no safety notes.
             """.trimIndent()
